@@ -62,13 +62,36 @@ let retrieveDatas = () => {
 
 			body.pools = result[7].split(';');
 
-			console.log(body);
-
 			api.post("/api/update.php?apikey=" + config.apiKey, body, (err, resp, body) => {
 				console.log(body);
 				console.log("Monitor updated.");
+
+				if (body.action != null){
+					sendAction(body.action);
+				}
 			});
 		}
+	});
+
+	client.on('close', () => {
+		console.log('Connection closed.');
+	});
+}
+
+let sendAction = action => {
+	console.log("Sending action : " + action);
+	let client = new net.Socket();
+
+	client.connect(config.claymore.port, config.claymore.ip, () => {
+		console.log("Connected !");
+
+		let data = {
+			"id":0,
+			"jsonrpc":"2.0",
+			"method":action
+		};
+
+		client.write(JSON.stringify(data));
 	});
 
 	client.on('close', () => {

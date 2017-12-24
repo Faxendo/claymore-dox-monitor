@@ -63,11 +63,12 @@ let retrieveDatas = () => {
 			body.pools = result[7].split(';');
 
 			api.post("/api/update.php?apikey=" + config.apiKey, body, (err, resp, body) => {
-				console.log(body);
 				console.log("Monitor updated.");
 
-				if (body.action != null){
-					sendAction(body.action);
+				if (body !== undefined){
+					if (body.action != null){
+						sendAction(body.action);
+					}
 				}
 			});
 		}

@@ -1,10 +1,24 @@
 const net = require("net");
 const config = require("config.json")("./config.json");
+const package = require("./package.json");
 const request = require("request-json");
+const compareVersions = require("compare-versions");
 
 const api = request.createClient("http://miner.dox.ovh");
 
 const interval = 30000;
+
+let checkVersion = () => {
+	api.get("/api/version.php", (err, resp, body) => {
+		if (compareVersions(package.version, body.version) != 0){
+			console.error("[ERREUR] La version du moniteur (" + package.version + ") ne correspond pas à la version demandée par l'API (" + body.version + "). Merci de mettre à jour avec un 'git pull'.");
+			process.exit();
+		} else {
+			retrieveDatas();
+			setInterval(retrieveDatas, interval);
+		}
+	});
+}
 
 let retrieveDatas = () => {
 	let client = new net.Socket();
@@ -100,5 +114,4 @@ let sendAction = action => {
 	});
 }
 
-retrieveDatas();
-setInterval(retrieveDatas, interval);
+checkVersion();

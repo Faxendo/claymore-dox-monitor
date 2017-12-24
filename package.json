@@ -1,15 +1,15 @@
 {
-  "name": "claymore-remote-manager",
+  "name": "claymore-dox-monitor",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "author": "",
+  "author": "Nassim Lakebir <nassim.lakebir@dox-network.com>",
   "license": "ISC",
   "dependencies": {
+    "compare-versions": "^3.1.0",
     "config.json": "0.0.4",
     "request-json": "^0.6.2"
   }
